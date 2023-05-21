@@ -1,0 +1,220 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Microsoft.VisualBasic;
+
+namespace Blp_vize
+{
+    public partial class Form1 : Form
+    {
+        int Ogrenci_adeti = 20;
+        bool bagıl_sistem_mi; 
+        List<int> no = new List<int>();
+        List<string> isim = new List<string>();
+        List<string> soyad = new List<string>();
+        List<double> vize = new List<double>();
+        List<double> final = new List<double>();
+        List<double> bütünleme = new List<double>();
+        List<double> yüzdenot = new List<double>();
+        List<double> yüzdenot2 = new List<double>();
+        List<string> bbn = new List<string>();
+        int secili_id = 0;
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Text = "";
+            Ogrenci_adeti = Convert.ToInt32(Interaction.InputBox("Öğrenci sayısını giriniz : ", "Veri girişi", "10", 500, 500));
+            richTextBox1.Text += "Öğrenci sayısı >>> "+Ogrenci_adeti.ToString() +"\n";
+            DialogResult dialogResult = MessageBox.Show("Bağıl sistem seçilsin mi ? ", "Bağıl  -  100lük sistem", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                bagıl_sistem_mi = true;
+                richTextBox1.Text += "Sistem >>> Bağıl";
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                bagıl_sistem_mi = false;
+                richTextBox1.Text += "Sistem >>> Mutlak";
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if(secili_id < Ogrenci_adeti-1)
+            {
+                no.Add(Convert.ToInt32(textBox1.Text));
+                isim.Add(textBox2.Text);
+                soyad.Add(textBox3.Text);
+
+                vize.Add(Convert.ToDouble(textBox6.Text));
+                final.Add(Convert.ToDouble(textBox5.Text));
+
+
+                if (checkBox1.Checked)
+                {
+                    bütünleme.Add(Convert.ToDouble(textBox7.Text));
+                    yüzdenot.Add(vize[secili_id] * 0.4 + bütünleme[secili_id] * 0.6);
+                }
+                else
+                {
+                    bütünleme.Add(0);
+                    yüzdenot.Add(vize[secili_id] * 0.4 + final[secili_id] * 0.6);
+                }
+
+                secili_id +=1;
+
+            }
+
+            textBox4.Text = (secili_id + 1).ToString();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (!bagıl_sistem_mi)
+            {
+                for (int i = bbn.Count; i <= yüzdenot.Count; i++)
+                {    
+                     bbn.Add("");
+                }
+
+                for (int i = 0; i < yüzdenot.Count; i++)
+                {
+                    if (yüzdenot[i] > 90)
+                    {
+                        bbn[i] = "AA";
+                    }
+                    else if (yüzdenot[i] > 75)
+                    {
+                        bbn[i] = "BA";
+                    }
+                    else if (yüzdenot[i] > 65)
+                    {
+                        bbn[i] = "BB";
+                    }
+                    else if (yüzdenot[i] > 55)
+                    {
+                        bbn[i] = "CB";
+                    }
+                    else if (yüzdenot[i] > 45)
+                    {
+                        bbn[i] = "DC";
+                    }
+                    else if (yüzdenot[i] > 35)
+                    {
+                        bbn[i] = "DD";
+                    }
+                    else
+                    {
+                        bbn[i] = "FF";
+                    }
+                }
+
+
+                int okul_no = Convert.ToInt32(Interaction.InputBox("Öğrenci numarası : ", "Arama", "123456", 500, 500));
+
+
+                for(int i = 0;i < no.Count; i++)
+                {
+                    if (no[i] == okul_no)
+                    {
+                        MessageBox.Show(bbn[i] );
+                    }
+                }
+
+
+            }
+            else
+            {
+                int maxNot = 0;
+                for (int i = bbn.Count; i <= yüzdenot.Count; i++)
+                {
+                    bbn.Add("");
+                }
+
+                for (int i = yüzdenot2.Count; i <= yüzdenot.Count; i++)
+                {
+                    yüzdenot2.Add(0);
+                }
+
+                for(int i = 0;i < yüzdenot.Count; i++)
+                {
+                    if (yüzdenot[i] > maxNot) 
+                    {
+                        maxNot = Convert.ToInt32( yüzdenot[i]);
+                    }
+                }
+
+                maxNot = 100 - maxNot;
+
+                for (int i = 0; i < yüzdenot.Count; i++)
+                {
+                    yüzdenot2[i] = yüzdenot[i] + maxNot;
+                }
+
+
+                for (int i = 0; i < yüzdenot2.Count; i++)
+                {
+                    if (yüzdenot2[i] > 90)
+                    {
+                        bbn[i] = "AA";
+                    }
+                    else if (yüzdenot2[i] > 75)
+                    {
+                        bbn[i] = "BA";
+                    }
+                    else if (yüzdenot2[i] > 65)
+                    {
+                        bbn[i] = "BB";
+                    }
+                    else if (yüzdenot2[i] > 55)
+                    {
+                        bbn[i] = "CB";
+                    }
+                    else if (yüzdenot2[i] > 45)
+                    {
+                        bbn[i] = "DC";
+                    }
+                    else if (yüzdenot2[i] > 35)
+                    {
+                        bbn[i] = "DD";
+                    }
+                    else
+                    {
+                        bbn[i] = "FF";
+                    }
+                }
+
+
+                int okul_no = Convert.ToInt32(Interaction.InputBox("Öğrenci numarası : ", "Arama", "123456", 400, 400));
+
+
+                for (int i = 0; i < no.Count; i++)
+                {
+                    if (no[i] == okul_no)
+                    {
+                        MessageBox.Show(bbn[i]);
+                    }
+                }
+
+
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+    }
+}
+
